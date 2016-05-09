@@ -34,3 +34,10 @@ Assume we have a user account at /home/username
          ├── source
          ├── static
          └── virtualenv
+
+## Fabric
+* Runs in Python 2
+    sudo pip2 install python-dev
+    sudo pip2 install fabric
+    sudo pip2 install pycrypto
+    sudo pip2 install ecdsa
