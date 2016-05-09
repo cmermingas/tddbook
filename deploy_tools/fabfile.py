@@ -8,6 +8,8 @@ IDENTITY = '/Users/cmermingas/.ssh/cmDigitalOcean'
 
 env.key_filename = IDENTITY
 
+# To run this: fab deploy:host=cmermingas@staging.fitbody.io
+
 def _create_directory_structure_if_necessary(site_folder):
     for subfolder in ('database', 'static', 'virtualenv', 'source'):
         run('mkdir -p %s/%s' % (site_folder, subfolder))
@@ -26,7 +28,7 @@ def _update_settings(source_folder, site_name):
     sed(settings_path, 'DEBUG = True', 'DEBUG = False')
     sed(settings_path,
         'ALLOWED_HOSTS =.+$',
-        'ALLOWED_HOSTS = ["%s"]' % (site_name,))
+        'ALLOWED_HOSTS = ("%s",)' % (site_name,))
     secret_key_file = source_folder + '/tddbook/secret_key.py'
     if not exists(secret_key_file):
         chars = string.ascii_letters + string.digits + '!@#$%^&*()_-+=:;<>,.?/{}[]~`'

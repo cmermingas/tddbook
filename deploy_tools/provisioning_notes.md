@@ -41,3 +41,15 @@ Assume we have a user account at /home/username
     sudo pip2 install fabric
     sudo pip2 install pycrypto
     sudo pip2 install ecdsa
+
+## Set up NGINX and GUNICORN
+## nginx.template.conf
+* Notice 'cmermingas' hardcoded in the file
+    sed "s/SITENAME/WWW.DOMAIN.COM/g" deploy_tools/nginx.template.conf | sudo tee /etc/nginx/sites-available/WWW.DOMAIN.COM
+    sudo ln -s /etc/nginx/sites-available/WWW.DOMAIN.COM /etc/nginx/sites-enabled/WWW.DOMAIN.COM
+
+## gunicorn-upstart.template.conf
+* Notice 'cmermingas' hardcoded in the file
+    sed "s/SITENAME/WWW.DOMAIN.COM/g" deploy_tools/gunicorn-upstart.template.conf | sudo tee /etc/init/gunicorn-WWW.DOMAIN.COM.conf
+    sudo service nginx reload
+    sudo start gunicorn-WWW.DOMAIN.COM
