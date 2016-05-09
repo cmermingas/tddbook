@@ -3,7 +3,10 @@ from fabric.api import env, local, run
 import random
 import string
 
-REPO_URL = 'https://github.com/cmermingas/tddbook.git'  #1
+REPO_URL = 'https://github.com/cmermingas/tddbook.git'
+IDENTITY = '/Users/cmermingas/.ssh/cmDigitalOcean'
+
+env.key_filename = IDENTITY
 
 def _create_directory_structure_if_necessary(site_folder):
     for subfolder in ('database', 'static', 'virtualenv', 'source'):
@@ -23,10 +26,10 @@ def _update_settings(source_folder, site_name):
     sed(settings_path, 'DEBUG = True', 'DEBUG = False')
     sed(settings_path,
         'ALLOWED_HOSTS =.+$',
-        'ALLOWED_HOSTS = [\'%s\']' % (site_name,))
+        'ALLOWED_HOSTS = ["%s"]' % (site_name,))
     secret_key_file = source_folder + '/tddbook/secret_key.py'
     if not exists(secret_key_file):
-        chars = string.ascii_letters + string.digits + string.punctuation
+        chars = string.ascii_letters + string.digits + '!@#$%^&*()_-+=:;<>,.?/{}[]~`'
         key = ''.join(random.SystemRandom().choice(chars) for _ in range(50))
         append(secret_key_file, "SECRET_KEY = '%s'" %(key,))
     append(settings_path, '\nfrom .secret_key import SECRET_KEY')
@@ -34,7 +37,7 @@ def _update_settings(source_folder, site_name):
 def _update_virtualenv(source_folder):
     virtualenv_folder = source_folder + '/../virtualenv'
     if not exists(virtualenv_folder + '/bin/pip'):
-        run('virtualenv -p=python3 %s' % (virtualenv_folder,))
+        run('virtualenv -p python3 %s' % (virtualenv_folder,))
     run('%s/bin/pip install -r %s/requirements.txt' % (virtualenv_folder, source_folder))
 
 def _update_static_files(source_folder):
