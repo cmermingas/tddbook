@@ -1,10 +1,7 @@
-from django.core.urlresolvers import resolve
-from django.http import HttpRequest
-from django.template.loader import render_to_string
 from django.test import TestCase
+from django.core.exceptions import ValidationError
 
 from lists.models import Item, List
-from lists.views import home_page
 
 
 class ListAndItemModelsTest(TestCase):
@@ -39,3 +36,10 @@ class ListAndItemModelsTest(TestCase):
     #     request = HttpRequest()
     #     home_page(request)
     #     self.assertEqual(Item.objects.count(), 0)
+
+    def test_cannot_save_empty_list_items(self):
+        list_ = List.objects.create()
+        item = Item(list=list_, text='')
+        with self.assertRaises(ValidationError):
+            item.save()
+            item.full_clean()
