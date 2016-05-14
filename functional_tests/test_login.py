@@ -1,6 +1,8 @@
-from .base import FunctionalTest
 import time
-from selenium.webdriver.support.ui import WebDriverWait
+
+from .base import FunctionalTest
+
+TEST_EMAIL = 'carlos@mockmyid.com'
 
 class LoginTest(FunctionalTest):
     def test_login_with_persona(self):
@@ -13,16 +15,27 @@ class LoginTest(FunctionalTest):
 
         # Carlos logs in with his e-mail address
         ## Use mockmyid.com for text email
-        self.browser.find_element_by_id('authentication_email').send_keys('carlos@mockmyid.com')
+        self.browser.find_element_by_id('authentication_email').send_keys(TEST_EMAIL)
         self.browser.find_element_by_tag_name('button').click()
 
         # The Persona window closes
         self.switch_to_new_window('To-Do')
 
         # He can see that he is logged in
-        self.wait_for_element_with_id('id_logout')
-        navbar = self.browser.find_element_by_css_selector('.navbar')
-        self.assertIn('carlos@mockmyid', navbar.text)
+        self.wait_to_be_logged_in(TEST_EMAIL)
+
+        # Refreshing the page, the session is still active
+        self.browser.refresh()
+        self.wait_to_be_logged_in(TEST_EMAIL)
+
+        # Click logout
+        self.browser.find_element_by_id('id_logout').click()
+        self.wait_to_be_logged_out(TEST_EMAIL)
+
+        # The logged out status also persists after a refresh
+        self.browser.refresh()
+        self.wait_to_be_logged_out(TEST_EMAIL)
+
 
     def switch_to_new_window(self, text_in_title):
         retries = 60
@@ -34,6 +47,3 @@ class LoginTest(FunctionalTest):
             retries -= 1
             time.sleep(.5)
         self.fail('could not find window')
-
-    def wait_for_element_with_id(self, element_id):
-        WebDriverWait(self.browser, timeout=30).until(lambda b: b.find_element_by_id(element_id))
