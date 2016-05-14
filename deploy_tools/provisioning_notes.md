@@ -42,6 +42,10 @@ Assume we have a user account at /home/username
     sudo pip2 install pycrypto
     sudo pip2 install ecdsa
 
+* Deploy:
+    fab deploy --host=cmermingas@staging.fitbody.io
+
+
 ## Set up NGINX and GUNICORN
 ## nginx.template.conf
 * Notice 'cmermingas' hardcoded in the file
@@ -53,3 +57,12 @@ Assume we have a user account at /home/username
     sed "s/SITENAME/WWW.DOMAIN.COM/g" deploy_tools/gunicorn-upstart.template.conf | sudo tee /etc/init/gunicorn-WWW.DOMAIN.COM.conf
     sudo service nginx reload
     sudo start gunicorn-WWW.DOMAIN.COM
+    sudo restart gunicorn-WWW.DOMAIN.COM
+
+* Logging with gunicorn
+    exec ../virtualenv/bin/gunicorn \
+        --bind unix:/tmp/superlists-staging.ottg.eu.socket \
+        --access-logfile ../access.log \
+        --error-logfile ../error.log \
+        superlists.wsgi:application
+    That will put an access log and error log into the ~/sites/$SITENAME folder.

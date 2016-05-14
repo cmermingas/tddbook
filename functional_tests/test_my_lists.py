@@ -15,7 +15,7 @@ class MyListsTest(FunctionalTest):
         # Visiting the 404 page, which loads quick
         self.browser.get(self.server_url + '/404_no_such_url/')
         self.browser.add_cookie(dict(
-            name=settings.SESSSION_COOKIE_NAME,
+            name=settings.SESSION_COOKIE_NAME,
             value=session.session_key,
             path='/',
         ))
@@ -29,5 +29,5 @@ class MyListsTest(FunctionalTest):
         # User gets logged in
         self.create_pre_authenticated_session(email)
 
-        self.browser.get(self.server.url)
+        self.browser.get(self.server_url)
         self.wait_to_be_logged_in(email)

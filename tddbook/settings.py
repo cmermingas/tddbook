@@ -25,8 +25,9 @@ SECRET_KEY = 'h+tg(7a-q=us2n@86(++%w+(d718xb0g+*q90xvz9)^sx0-h!%'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+DOMAIN = 'localhost'
 
+ALLOWED_HOSTS = [DOMAIN]
 
 # Application definition
 
@@ -148,3 +149,5 @@ LOGGING = {
     },
     'root': {'level': 'INFO'},
 }
+
+# For per
