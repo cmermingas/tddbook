@@ -27,7 +27,7 @@ def _update_settings(source_folder, site_name):
     settings_path = source_folder + '/tddbook/settings.py'
     sed(settings_path, 'DEBUG = True', 'DEBUG = False')
     sed(settings_path,
-        "DOMAIN = 'localhost'",
+        'DOMAIN = "localhost"',
         'DOMAIN = "%s"' % (site_name,))
     secret_key_file = source_folder + '/tddbook/secret_key.py'
     if not exists(secret_key_file):

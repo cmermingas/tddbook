@@ -25,7 +25,7 @@ SECRET_KEY = 'h+tg(7a-q=us2n@86(++%w+(d718xb0g+*q90xvz9)^sx0-h!%'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-DOMAIN = 'localhost'
+DOMAIN = "localhost"
 
 ALLOWED_HOSTS = [DOMAIN]
 
